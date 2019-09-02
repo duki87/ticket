@@ -8,18 +8,17 @@
   }
 
 ?>
-<div class="container" id="markers-on-the-map">
+<div class="container mx-auto" id="markers-on-the-map">
   <div class="jumbotron">
-    <h1 class="display-4">Add Station</h1>
+    <h1 class="display-2">Add Station</h1>
     <p class="lead">Add a new station which can be later used for routes.</p>
     <hr class="my-4">
     <div class="page-header">
-        <h1>Calculating a Location from a Mouse Click</h1>
-        <p>Obtain the latitude and longitude of a location within the map</p>
+        <h1>Click on a location on the map to add new station.</h1>
+        <p>Latitude and longitude of a station will be automatically added.</p>
     </div>
-    <p>This example displays a map of the world. Clicking on the map displays an alert box containing the latitude and longitude of the location pressed.</p>
     <div id="map"></div>
-
+    <div id="panel"></div>
     <form class="needs-validation" action="<?=$_SERVER['PHP_SELF'];?>" method="post">
       <div class="form-row">
         <input type="hidden" name="add_station" value="1">
@@ -37,15 +36,28 @@
             Looks good!
           </div>
         </div>
-        <div class="col-md-4 mb-3">
-          <label for="validationCustomUsername">Username</label>
+        <div class="col-md-6 mb-3">
+          <label for="validationCustomUsername">Coordinates</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroupPrepend">@</span>
+              <span class="input-group-text" id="inputGroupPrepend">Latitude</span>
             </div>
-            <input type="text" class="form-control" id="validationCustomUsername" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+            <input type="text" disabled class="form-control" name="lat" id="lat" placeholder="" aria-describedby="latitude" required>
             <div class="invalid-feedback">
-              Please choose a username.
+              Please choose latitude.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="validationCustomUsername" style="visibility:hidden">Coordinates</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend">Longitude</span>
+            </div>
+            <input type="text" disabled class="form-control" name="lng" id="lng" placeholder="" aria-describedby="latitude" required>
+            <div class="invalid-feedback">
+              Please choose longitude.
             </div>
           </div>
         </div>

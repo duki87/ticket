@@ -8,6 +8,6 @@
     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <link rel="stylesheet" type="text/css" href="public/css/heremaps/demo.css" />
     <link rel="stylesheet" type="text/css" href="public/css/heremaps/styles.css" />
-    <link rel="stylesheet" type="text/css" href="public/css/heremaps/template.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="public/css/heremaps/template.css" /> -->
   </head>
   <body>
