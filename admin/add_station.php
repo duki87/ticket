@@ -18,7 +18,6 @@
         <p>Latitude and longitude of a station will be automatically added.</p>
     </div>
     <div id="map"></div>
-    <div id="panel"></div>
     <form class="needs-validation" action="<?=$_SERVER['PHP_SELF'];?>" method="post">
       <div class="form-row">
         <input type="hidden" name="add_station" value="1">

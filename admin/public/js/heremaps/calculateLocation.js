@@ -17,15 +17,15 @@ function setUpClickListener(map) {
         ((coord.lat > 0) ? 'N' : 'S') +
         ' ' + Math.abs(coord.lng.toFixed(4)) +
          ((coord.lng > 0) ? 'E' : 'W'));
-    document.getElementById('lat').value = Math.abs(coord.lat.toFixed(4)) + ((coord.lat > 0) ? 'N' : 'S');
-    document.getElementById('lng').value = Math.abs(coord.lng.toFixed(4)) + ((coord.lng > 0) ? 'N' : 'S');
+    //document.getElementById('lat').value = Math.abs(coord.lat.toFixed(4)) + ((coord.lat > 0) ? 'N' : 'S');
+    //document.getElementById('lng').value = Math.abs(coord.lng.toFixed(4)) + ((coord.lng > 0) ? 'N' : 'S');
     let lat = coord.lat.toFixed(4);
     let lng = coord.lng.toFixed(4);
+    document.getElementById('lat').value = lat;
+    document.getElementById('lng').value = lng;
     addInfoBubble(map, lat, lng, evt);
     let prox = String(lat+','+lng);
-    var addressData = reverseGeocode(platform, prox);
-    console.log(addressData);
-    document.getElementById('address').value = addressData.label;
+    reverseGeocode(platform, prox);
   });
 }
 
@@ -86,34 +86,32 @@ setUpClickListener(map);
  * @param {String} html             Data associated with the marker
  */
 function addMarkerToGroup(group, coordinate, html) {
-  var marker = new H.map.Marker(coordinate);
-  // add custom data to the marker
-  marker.setData(html);
-  group.addObject(marker);
+    var marker = new H.map.Marker(coordinate);
+    // add custom data to the marker
+    marker.setData(html);
+    group.addObject(marker);
 }
 
 function addInfoBubble(map, lat, lng, evt) {
-  var group = new H.map.Group();
+    var group = new H.map.Group();
 
-  map.addObject(group);
+    map.addObject(group);
 
-  // add 'tap' event listener, that opens info bubble, to the group
-  group.addEventListener('tap', function (evt) {
-    // event target is the marker itself, group is a parent event target
-    // for all objects that it contains
-    var bubble =  new H.ui.InfoBubble(evt.target.getGeometry(), {
-      // read custom data
-      content: evt.target.getData()
-    });
-    //remove infobubbles
-    ui.getBubbles().forEach(bub => ui.removeBubble(bub));
-    // show info bubble
-    ui.addBubble(bubble);
-  }, false);
+    // add 'tap' event listener, that opens info bubble, to the group
+    group.addEventListener('tap', function (evt) {
+      // event target is the marker itself, group is a parent event target
+      // for all objects that it contains
+      var bubble =  new H.ui.InfoBubble(evt.target.getGeometry(), {
+        // read custom data
+        content: evt.target.getData()
+      });
+      //remove infobubbles
+      ui.getBubbles().forEach(bub => ui.removeBubble(bub));
+      // show info bubble
+      ui.addBubble(bubble);
+    }, false);
 
-  addMarkerToGroup(group, {lat:lat, lng:lng}, '<div>Location:<br> <span>Latitude: '+lat+'</span><br><span>Longitude: '+lng+'</span></div>');
-
-  // addMarkerToGroup(group, {lat:53.430, lng:-2.961}, 'sdfsdfsdf');
+    addMarkerToGroup(group, {lat:lat, lng:lng}, '<div>Location:<br> <span>Latitude: '+lat+'</span><br><span>Longitude: '+lng+'</span></div>');
 
 }
 
@@ -122,31 +120,33 @@ addInfoBubble(map);
 //REVERSE GEOCODING
 
 function reverseGeocode(platform, prox) {
-  var geocoder = platform.getGeocodingService(),
-    reverseGeocodingParameters = {
-      prox: prox,
-      mode: 'retrieveAddresses',
-      maxresults: '1',
-      jsonattributes : 1
-    };
+    var geocoder = platform.getGeocodingService(),
+      reverseGeocodingParameters = {
+        prox: prox,
+        mode: 'retrieveAddresses',
+        maxresults: '1',
+        jsonattributes : 1
+      };
 
-  return geocoder.reverseGeocode(reverseGeocodingParameters, onSuccess,
-    //onError
-  );
+    return geocoder.reverseGeocode(reverseGeocodingParameters, onSuccess, onError);
 }
 
 function onSuccess(result) {
-  var locations = result.response.view[0].result;
- /*
-  * The styling of the geocoding response on the map is entirely under the developer's control.
-  * A representitive styling can be found the full JS + HTML code of this example
-  * in the functions below:
-  */
-  // console.log(locations[0].location.address);
-  return locations[0].location.address;
-  // ... etc.
+   var locations = result.response.view[0].result;
+   /*
+    * The styling of the geocoding response on the map is entirely under the developer's control.
+    * A representitive styling can be found the full JS + HTML code of this example
+    * in the functions below:
+    */
+    //console.log(locations[0].location.address);
+    //return locations[0].location.address;
+    addAddress(locations[0].location.address);
 }
 
 function onError(error) {
-  alert('Can\'t reach the remote server');
+    alert('Can\'t reach the remote server');
+}
+
+function addAddress(addressData) {
+    document.getElementById('address').value = addressData.label;
 }
