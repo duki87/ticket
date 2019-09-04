@@ -1,4 +1,4 @@
-
+var bubbleData;
 /**
  * An event listener is added to listen to tap events on the map.
  * Clicking on the map displays an alert box containing the latitude and longitude
@@ -23,7 +23,7 @@ function setUpClickListener(map) {
     let lng = coord.lng.toFixed(4);
     document.getElementById('lat').value = lat;
     document.getElementById('lng').value = lng;
-    addInfoBubble(map, lat, lng, evt);
+    addInfoBubble(map, lat, lng);
     let prox = String(lat+','+lng);
     reverseGeocode(platform, prox);
   });
@@ -92,7 +92,7 @@ function addMarkerToGroup(group, coordinate, html) {
     group.addObject(marker);
 }
 
-function addInfoBubble(map, lat, lng, evt) {
+function addInfoBubble(map, lat, lng) {
     var group = new H.map.Group();
 
     map.addObject(group);
@@ -110,9 +110,7 @@ function addInfoBubble(map, lat, lng, evt) {
       // show info bubble
       ui.addBubble(bubble);
     }, false);
-
-    addMarkerToGroup(group, {lat:lat, lng:lng}, '<div>Location:<br> <span>Latitude: '+lat+'</span><br><span>Longitude: '+lng+'</span></div>');
-
+    addMarkerToGroup(group, {lat:lat, lng:lng}, '<div>Location:<br>' +bubbleData+'</div>');
 }
 
 addInfoBubble(map);
@@ -148,5 +146,6 @@ function onError(error) {
 }
 
 function addAddress(addressData) {
+    bubbleData = addressData.label;
     document.getElementById('address').value = addressData.label;
 }

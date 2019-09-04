@@ -1,7 +1,9 @@
-<?php  include_once 'views/header.php'; ?>
-<?php require_once 'class/Routes.class.php';
-require_once 'db/connection.php';
-  $routes = new Routes($conn);
+<?php
+  require_once 'config.php';
+  include_once DOCUMENT_ROOT.'views/header.php';
+  if(isset($_SESSION['message'])) {
+    echo $_SESSION['message'];
+  }
 ?>
 <div class="container">
   <div class="jumbotron">
@@ -73,3 +75,5 @@ require_once 'db/connection.php';
   </div>
 </div>
 <?php  include_once 'views/footer.php'; ?>
+  </body>
+</html>
