@@ -1,5 +1,5 @@
 <?php
-  session_start();  
+  session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <link rel="stylesheet" type="text/css" href="public/css/heremaps/demo.css" />
     <link rel="stylesheet" type="text/css" href="public/css/heremaps/styles.css" />
+    <link rel="stylesheet" type="text/css" href="public/css/heremaps/calculateRoute.css" />
     <!-- <link rel="stylesheet" type="text/css" href="public/css/heremaps/template.css" /> -->
   </head>
   <body>

@@ -1,14 +1,7 @@
-/**
- * Calculates and displays a car route from the Brandenburg Gate in the centre of Berlin
- * to Friedrichstraße Railway Station.
- *
- * A full list of available request parameters can be found in the Routing API documentation.
- * see:  http://developer.here.com/rest-apis/documentation/routing/topics/resource-calculate-route.html
- *
- * @param   {H.service.Platform} platform    A stub class to access HERE services
- */
+$(document).ready(function() {
 
- $(document).ready(function() {
+  //HereMaps methods
+
    var waypoint0 = '52.5160,13.3779', waypoint1 = '52.5206,13.3862';
    $(document).on('change', '.station_from', function(event) {
       let lat0 = event.target.selectedOptions[0].dataset.lat;
@@ -36,18 +29,9 @@
            waypoint0: waypoint0,
            waypoint1: waypoint1
          };
-       router.calculateRoute(
-         routeRequestParams,
-         onSuccess,
-         onError
-       );
+       router.calculateRoute(routeRequestParams, onSuccess, onError);
    }
-   /**
-    * This function will be called once the Routing REST API provides a response
-    * @param  {Object} result          A JSONP object representing the calculated route
-    *
-    * see: http://developer.here.com/rest-apis/documentation/routing/topics/resource-type-calculate-route.html
-    */
+
    function onSuccess(result) {
        var route = result.response.route[0];
       /*
@@ -55,17 +39,16 @@
        * A representitive styling can be found the full JS + HTML code of this example
        * in the functions below:
        */
+       getRouteSegmentDetails(route.summary);
        addRouteShapeToMap(route);
        addManueversToMap(route);
-
        addWaypointsToPanel(route.waypoint);
        addManueversToPanel(route);
        addSummaryToPanel(route.summary);
-       getRouteSegmentDetails(route.summary);
    }
 
    function onError(error) {
-      alert('Can\'t reach the remote server');
+       alert('Can\'t reach the remote server');
    }
 
    /**
@@ -105,13 +88,8 @@
    // Hold a reference to any infobubble opened
    var bubble;
 
-   /**
-    * Opens/Closes a infobubble
-    * @param  {H.geo.Point} position     The location on the map.
-    * @param  {String} text              The contents of the infobubble.
-    */
-   function openBubble(position, text){
-    if(!bubble){
+   function openBubble(position, text) {
+    if(!bubble) {
        bubble =  new H.ui.InfoBubble(
          position,
          // The FO property holds the province name.
@@ -124,12 +102,7 @@
      }
    }
 
-
-   /**
-    * Creates a H.map.Polyline from the shape of the route and adds it to the map.
-    * @param {Object} route A route as received from the H.service.RoutingService
-    */
-   function addRouteShapeToMap(route){
+   function addRouteShapeToMap(route) {
      var lineString = new H.geo.LineString(),
        routeShape = route.shape,
        polyline;
@@ -153,11 +126,6 @@
      });
    }
 
-
-   /**
-    * Creates a series of H.map.Marker points from the route and adds them to the map.
-    * @param {Object} route  A route as received from the H.service.RoutingService
-    */
    function addManueversToMap(route) {
      var svgMarkup = '',
        dotIcon = new H.map.Icon(svgMarkup, {anchor: {x:8, y:8}}),
@@ -190,17 +158,11 @@
      map.addObject(group);
    }
 
-
-   /**
-    * Creates a series of H.map.Marker points from the route and adds them to the map.
-    * @param {Object} route  A route as received from the H.service.RoutingService
-    */
    function addWaypointsToPanel(waypoints) {
 
      var nodeH3 = document.createElement('h3'),
        waypointLabels = [],
        i;
-
 
       for (i = 0;  i < waypoints.length; i += 1) {
         waypointLabels.push(waypoints[i].label)
@@ -212,15 +174,11 @@
      routeInstructionsContainer.appendChild(nodeH3);
    }
 
-   /**
-    * Creates a series of H.map.Marker points from the route and adds them to the map.
-    * @param {Object} route  A route as received from the H.service.RoutingService
-    */
    function addSummaryToPanel(summary) {
      var summaryDiv = document.createElement('div'),
-      content = '';
-      content += 'Total distance: ' + summary.distance  + 'm.';
-      content += 'Travel Time: ' + summary.travelTime.toMMSS() + ' (in current traffic)';
+          content = '';
+          content += 'Total distance: ' + summary.distance  + 'm.';
+          content += 'Travel Time: ' + summary.travelTime.toMMSS() + ' (in current traffic)';
 
      summaryDiv.style.fontSize = 'small';
      summaryDiv.style.marginLeft ='5%';
@@ -230,17 +188,20 @@
    }
 
    function getRouteSegmentDetails(summary) {
-      console.log(summary.distance);
-      console.log(summary.travelTime.toMMSS());
+      // let data = {
+      //   distance: summary.distance/1000 + ' km',
+      //   time: summary.travelTime.toMMSS()
+      // }
+      // routeData(data);
+      // travelTime = summary.travelTime.toMMSS()
+      // $('.add_station').last().find('.station_from').append(stations_from);
+      let min = Math.floor(summary.travelTime / 60);
+      let sec = Math.floor(summary.travelTime % 60);
+      travelTime = min + ':' + sec;
+      $('.add_station').last().find('.time').val(travelTime);
    }
 
-   /**
-    * Creates a series of H.map.Marker points from the route and adds them to the map.
-    * @param {Object} route  A route as received from the H.service.RoutingService
-    */
-   function addManueversToPanel(route){
-
-
+   function addManueversToPanel(route) {
 
      var nodeOL = document.createElement('ol'),
        i,
@@ -251,7 +212,7 @@
      nodeOL.style.marginRight ='5%';
      nodeOL.className = 'directions';
 
-        // Add a marker for each maneuver
+    // Add a marker for each maneuver
      for (i = 0;  i < route.leg.length; i += 1) {
        for (j = 0;  j < route.leg[i].maneuver.length; j += 1) {
          // Get the next maneuver.
@@ -269,7 +230,6 @@
          nodeOL.appendChild(li);
        }
      }
-
      routeInstructionsContainer.appendChild(nodeOL);
    }
 
@@ -280,4 +240,113 @@
 
    // Now use the map as required...
    //calculateRouteFromAtoB (platform);
+
+   //Other javascript methods for this page
+
+   get_stations();
+
+   var stations_from = [];
+   var stations_to = [];
+   var travelTime;
+   var startTime = new Date();
+
+   //Get list of stations
+   function get_stations(station_from = null) {
+     var get_stations = true;
+     $.ajax({
+       url: "process/station.process.php",
+       method: 'post',
+       data: {get_stations:get_stations},
+       dataType: 'json',
+       success: function(data) {
+         //console.log(data);
+         load_stations(data, station_from);
+         append_stations();
+       },
+       error: function(err) {
+         console.log(err);
+       }
+     });
+   }
+
+   function append_stations() {
+     $('.add_station').last().find('.station_from').append(stations_from);
+     $('.add_station').last().find('.station_to').append(stations_to);
+   }
+
+   $(document).on('click', '#add_station_div', function(e) {
+       e.preventDefault();
+       add_station_div();
+   });
+
+   $(document).on('change', '.departure', function(e) {
+       e.preventDefault();
+       if($('.departure').length  == 1) {
+         let time = ($(this).val()).split(':');
+         //console.log(time[0] + ' ' + time[1]);
+         startTime.setHours(time[0]);
+         startTime.setMinutes(time[1]);
+         startTime.setSeconds(time[2]);
+         let stationsTravelTime = $(this).parent().siblings('.timegroup').find('.time').val();
+         changeArrivalTime(stationsTravelTime);
+       }
+   });
+
+   function changeArrivalTime(time) {
+      let arrTime = new Date();
+   }
+
+   function add_station_div() {
+     let station_from = $('.add_station').last().find('.station_to').val();
+     let add_station_div =
+     '<div class="form-row col-md-12 add_station">'+
+         '<div class="col-md-12">Station</div>'+
+         '<div class="input-group col-md-6 mb-3">'+
+           '<div class="input-group-prepend">'+
+             '<label class="input-group-text" for="inputGroupSelect01">Station from</label>'+
+           '</div>'+
+           '<select class="custom-select station_from" id="station_from" name="station_from[]">'+
+             '<option>Choose...</option>'+
+           '</select>'+
+         '</div>'+
+         '<div class="input-group col-md-6 mb-3">'+
+           '<div class="input-group-prepend">'+
+             '<label class="input-group-text" for="inputGroupSelect01">Station to</label>'+
+           '</div>'+
+           '<select class="custom-select station_to" id="station_to" name="station_to[]">'+
+             '<option>Choose...</option>'+
+           '</select>'+
+         '</div>'+
+         '<div class="input-group col-md-4 mb-3">'+
+           '<div class="input-group-prepend">'+
+             '<label class="input-group-text" for="inputGroupSelect01">Depart.</label>'+
+           '</div>'+
+           '<input type="time" name="departure[]" value="" class="form-control">'+
+         '</div>'+
+         '<div class="input-group col-md-4 mb-3">'+
+           '<div class="input-group-prepend">'+
+             '<label class="input-group-text" for="inputGroupSelect01">Arrival</label>'+
+           '</div>'+
+           '<input type="time" name="arrival[]" value="" class="form-control">'+
+         '</div>'+
+         '<div class="input-group col-md-4 mb-3">'+
+           '<div class="input-group-prepend">'+
+             '<label class="input-group-text" for="inputGroupSelect01">Time</label>'+
+           '</div>'+
+           '<input type="text" readonly name="arrival[]" value="" class="form-control time">'+
+         '</div>'+
+       '</div>';
+       $('.add_station').last().after(add_station_div);
+       get_stations(station_from);
+   }
+
+   function load_stations(data, station_from) {
+     data.forEach(station => {
+         if(station_from == station.id) {
+           stations_from.push('<option selected value="'+station.id+'" data-lat="'+station.latitude+'" data-lng="'+station.longitude+'">'+station.title+'</option>');
+         }
+         stations_from.push('<option value="'+station.id+'" data-lat="'+station.latitude+'" data-lng="'+station.longitude+'">'+station.title+'</option>');
+         stations_to.push('<option value="'+station.id+'" data-lat="'+station.latitude+'" data-lng="'+station.longitude+'">'+station.title+'</option>');
+     });
+   }
  });

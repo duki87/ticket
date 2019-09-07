@@ -1,7 +1,6 @@
 <?php
   require_once 'config.php';
   include_once DOCUMENT_ROOT.'views/header.php';
-  include_once DOCUMENT_ROOT.'class/Routes.class.php';
   require_once DOCUMENT_ROOT . '/db/connection.php';
 ?>
     <div class="container mx-auto" id="">
@@ -28,7 +27,7 @@
             <div class="col-md-12">Stations <hr> </div>
             <div class="form-row col-md-12 add_station">
               <div class="col-md-12">Start station</div>
-              <div class="input-group col-md-4 mb-3">
+              <div class="input-group col-md-6 mb-3">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">Station from</label>
                 </div>
@@ -37,7 +36,7 @@
                 </select>
               </div>
 
-              <div class="input-group col-md-4 mb-3">
+              <div class="input-group col-md-6 mb-3">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">Station to</label>
                 </div>
@@ -46,22 +45,30 @@
                 </select>
               </div>
 
-              <div class="input-group col-md-2 mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">Arrival</label>
-                </div>
-                <input type="time" name="arrival[]" value="" class="form-control">
-              </div>
-              <div class="input-group col-md-2 mb-3">
+              <div class="input-group col-md-4 mb-3">
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">Depart.</label>
                 </div>
-                <input type="time" name="departure[]" value="" class="form-control">
+                <input type="time" name="departure[]" value="00:00:00" class="form-control departure">
+              </div>
+
+              <div class="input-group col-md-4 mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Arrival</label>
+                </div>
+                <input type="time" name="arrival[]" value="00:00:00" class="form-control arrival">
+              </div>
+
+              <div class="input-group col-md-4 mb-3 timegroup">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Time</label>
+                </div>
+                <input type="text" readonly name="arrival[]" value="" class="form-control time">
               </div>
             </div>
 
             <div class="col-md-12">
-              <button type="button" name="button" class="btn btn-primary float-right add_station_div"><i class="fas fa-plus"></i> Add another station</button>
+              <button type="button" name="button" class="btn btn-primary float-right" id="add_station_div"><i class="fas fa-plus"></i> Add another station</button>
             </div>
 
             <div class="col-md-6 mb-3">
